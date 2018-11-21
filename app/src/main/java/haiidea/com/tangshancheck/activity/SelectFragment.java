@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -22,6 +23,14 @@ import haiidea.com.tangshancheck.R;
 public class SelectFragment extends Fragment {
     @Bind(R.id.tiller)
     TextView mTitlerTV;
+    @Bind(R.id.one_rb)
+    RadioButton oneRB;
+    @Bind(R.id.two_rb)
+    RadioButton twoRB;
+    @Bind(R.id.three_rb)
+    RadioButton threeRB;
+    @Bind(R.id.four_rb)
+    RadioButton fourRB;
 
     private Activity mActivity;
     private Bundle mParamBundle;
@@ -41,7 +50,31 @@ public class SelectFragment extends Fragment {
         String type = getArguments().getString("type", "");
         mParamBundle = getArguments().getBundle("param");
         mParamBundle.putString(type,type);
-        mTitlerTV.setText(type);
+        String title="";
+        oneRB.setText("优");
+        twoRB.setText("良");
+        twoRB.setChecked(true);
+        threeRB.setText("中");
+        fourRB.setText("差");
+        switch (type){
+            case "1":
+                title= "政治意识";
+                oneRB.setText("优");
+                break;
+            case "2":
+                title= "大局意识";
+                break;
+            case "3":
+                title= "思想品质";
+                break;
+            case "4":
+                title= "道德作风";
+                break;
+            case "5":
+                title= "廉政";
+                break;
+        }
+        mTitlerTV.setText(title);
         return view;
     }
     @OnClick({R.id.tiller})

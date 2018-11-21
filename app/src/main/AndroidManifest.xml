@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.QuestionActivity"
+        <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name="haiidea.com.tangshancheck.activity.QuestionActivity"-->
-            <!--android:label="答题页面"-->
-            <!--android:screenOrientation="portrait"/>-->
+        <activity android:name="haiidea.com.tangshancheck.activity.SelectActivity"
+            android:label="测评类型选择"
+            android:screenOrientation="portrait"/>
+        <activity android:name="haiidea.com.tangshancheck.activity.QuestionActivity"
+            android:label="答题页面"
+            android:screenOrientation="portrait"/>
         <activity android:name="haiidea.com.tangshancheck.activity.PersonActivity"
             android:label="评测配置"
             android:screenOrientation="portrait"/>

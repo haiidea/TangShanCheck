@@ -15,23 +15,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import haiidea.com.tangshancheck.activity.QuestionActivity;
+import haiidea.com.tangshancheck.activity.SelectActivity;
 import haiidea.com.tangshancheck.callback.MyAuthCallback;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    @Bind(R.id.title_tv)
+    TextView mTitleTV;
+    @Bind(R.id.back_iv)
+    ImageView mBackIV;
     @Bind(R.id.key_tv)
     TextView mKeyTipTV;
     @Bind(R.id.username_et)
     EditText mUsernameET;
     @Bind(R.id.pw_et)
     EditText mPWET;
+    @Bind(R.id.icon)
+    ImageView mIconTV;
 
     private CancellationSignal mCancellationSignal = new CancellationSignal();
     private MyAuthCallback myAuthCallback;
@@ -67,15 +74,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        mBackIV.setVisibility(View.GONE);
+        mTitleTV.setText("欢迎进入测评系统");
         String username = AppConfig.getAppConfig().get("username");
         if (!TextUtils.isEmpty(username)){
             mUsernameET.setText(username);
             mUsernameET.setSelection(username.length());
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
         if ("1".equals(AppConfig.getAppConfig().get("is_bind_key"))) {// 是否已经录入指纹
             initKey();
         }
     }
+
     private void initKey(){
         try {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
@@ -101,12 +116,16 @@ public class MainActivity extends AppCompatActivity {
             if (!fingerprintManager.isHardwareDetected()) {
                 //是否支持指纹识别
                 mKeyTipTV.setText("该设备不支持指纹登录");
+                toNextActivity();
             } else if (!fingerprintManager.hasEnrolledFingerprints()) {
                 //是否已注册指纹
                 mKeyTipTV.setText("请到设置页面录入指纹");
             } else {
-                if ("1".equals(AppConfig.getAppConfig().get("is_bind_key"))) {
+                mIconTV.setVisibility(View.VISIBLE);
+                if (!"1".equals(AppConfig.getAppConfig().get("is_bind_key"))) {
                     mKeyTipTV.setText("请按压指纹绑定账号");
+                }else{
+                    mKeyTipTV.setText("请按压指纹登录");
                 }
                 try {
                     //这里去新建一个结果的回调，里面回调显示指纹验证的信息
@@ -163,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
         if (mCancellationSignal != null) {
             mCancellationSignal.cancel();
         }
-        startActivity(new Intent(MainActivity.this,QuestionActivity.class));
+        startActivity(new Intent(MainActivity.this,SelectActivity.class));
+        // TODO: 2018/11/12          finish(); 是否能返回登录页面，待定
     }
     private void bindKey(){
         String pw = mPWET.getText().toString().trim();
